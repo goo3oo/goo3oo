@@ -78,7 +78,10 @@
                 const timestamp = data.timestamp ? formatTime(data.timestamp.toDate()) : "시간 없음";
                 $('#chatting-bg').append('<p><span class="timestamp" style="font-size:10px; color:gray;">' + timestamp + '</span><strong style="color:#b79c00"> 1</strong><strong> ' + data.name + ' </strong> <span class="outputMsg">' + data.dialog + '</span></p>');
             })
+            $('#chatting-bg').scrollTop($('#chatting-bg')[0].scrollHeight);
         }
+
+
         function formatTime(date) {
             const month = date.getMonth() + 1;
             const day = date.getDate();
@@ -87,14 +90,16 @@
             return `${month}.${day}. ${hours}:${minutes}`;
         }
     </script>
+
 </head>
 
 <body>
     <div id="Container">
         <h3>👀</h3>
         <div id="chatting-bg">
-            <p style="text-align: left;">
-                <span><img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcxkAZe%2FbtsKvhcx40E%2FNlqc0ye92wytmN5tcSl6F1%2Fimg.png"></span>
+            <p>
+                <span><img
+                        src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcxkAZe%2FbtsKvhcx40E%2FNlqc0ye92wytmN5tcSl6F1%2Fimg.png"></span>
                 <span class="leftMsg">안녕🙂 메시지를 남겨줘</span>
             </p>
         </div>
