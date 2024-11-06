@@ -9,7 +9,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "API_KEY",
@@ -72,14 +72,15 @@
         }
 
         async function loadMessages() {
-            const querySnapshot = await getDocs(collection(db, "msg"));
-            querySnapshot.forEach((doc) => {
-                const data = doc.data();
-                const timestamp = data.timestamp ? formatTime(data.timestamp.toDate()) : "시간 없음";
-                $('#chatting-bg').append('<p><span class="timestamp" style="font-size:10px; color:gray;">' + timestamp + '</span><strong style="color:#b79c00"> 1</strong><strong> ' + data.name + ' </strong> <span class="outputMsg">' + data.dialog + '</span></p>');
-            })
-            $('#chatting-bg').scrollTop($('#chatting-bg')[0].scrollHeight);
-        }
+    const querySnapshot = await getDocs(query(collection(db, "msg"), orderBy("timestamp")));
+    querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const timestamp = data.timestamp ? formatTime(data.timestamp.toDate()) : "시간 없음";
+        $('#chatting-bg').append('<p><span class="timestamp" style="font-size:10px; color:gray;">' + timestamp + '</span><strong style="color:#b79c00"> 1</strong><strong> ' + data.name + ' </strong> <span class="outputMsg">' + data.dialog + '</span></p>');
+    })
+    $('#chatting-bg').scrollTop($('#chatting-bg')[0].scrollHeight);
+}
+
 
         function formatTime(date) {
             const month = date.getMonth() + 1;
