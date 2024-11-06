@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "API_KEY",
+            authDomain: "sparta-cfc74.firebaseapp.com",
+            projectId: "sparta-cfc74",
+            storageBucket: "sparta-cfc74.firebasestorage.app",
+            messagingSenderId: "110318008118",
+            appId: "1:110318008118:web:88cf8374bd91098ea26597",
+            measurementId: "G-98EN8Z3R9M"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        $(document).ready(function () {
+            loadMessages();
+
+            $("#sendBtn").click(async function () {
+                await sendMessage();
+            });
+
+            $("#msgInput").keyup(async function (event) {
+                if (event.key === "Enter") {
+                    await sendMessage();
+                }
+            });
+        });
+
+        async function sendMessage() {
+            let dialog = $('#msgInput').val();
+            let name = $('#nameInput').val();
+
+            if (!dialog || !dialog.trim()) {
+                alert("메시지를 입력하세요.");
+                return;
+            }
+
+            if (!name || !name.trim()) {
+                alert("이름을 입력하세요.");
+                return;
+            }
+
+            let doc = {
+                dialog: dialog,
+                name: name,
+                timestamp: serverTimestamp()
+            };
+
+            try {
+                await addDoc(collection(db, "msg"), doc);
+                $('#msgInput').val('');
+
+                const formattedTime = formatTime(new Date());
+
+                $('#chatting-bg').append('<p><span class="timestamp" style="font-size:10px; color:gray;">' + formattedTime + '</span><strong style="color:#b79c00"> 1</strong><strong> ' + name + ' </strong> <span class="outputMsg">' + dialog + '</span></p>');
+                $('#chatting-bg').scrollTop($('#chatting-bg')[0].scrollHeight);
+            } catch (e) {
+                console.error("Error adding document: ", e);
+            }
+        }
+
+        async function loadMessages() {
+            const querySnapshot = await getDocs(collection(db, "msg"));
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                const timestamp = data.timestamp ? formatTime(data.timestamp.toDate()) : "시간 없음";
+                $('#chatting-bg').append('<p><span class="timestamp" style="font-size:10px; color:gray;">' + timestamp + '</span><strong style="color:#b79c00"> 1</strong><strong> ' + data.name + ' </strong> <span class="outputMsg">' + data.dialog + '</span></p>');
+            })
+            $('#chatting-bg').scrollTop($('#chatting-bg')[0].scrollHeight);
+        }
+
+        function formatTime(date) {
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            const hours = date.getHours();
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            return `${month}.${day}. ${hours}:${minutes}`;
+        }
+    </script>
+
+</head>
+
+<body>
+    <div id="Container">
+        <h3>👀</h3>
+        <div id="chatting-bg">
+            <p style="text-align: left;">
+                <span><img
+                        src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcxkAZe%2FbtsKvhcx40E%2FNlqc0ye92wytmN5tcSl6F1%2Fimg.png"></span>
+                <span class="leftMsg">안녕🙂 메시지를 남겨줘</span>
+            </p>
+        </div>
+        <div id="inputContainer">
+            <input id="nameInput" type="text" placeholder="이름 입력" size="20">
+            <input id="msgInput" type="text" placeholder="메시지 입력" size="50">
+        </div>
+        <p><button id="sendBtn"></button></p>
+    </div>
+</body>
+
+</html>
