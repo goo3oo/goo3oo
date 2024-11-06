@@ -123,3 +123,28 @@ img {
 #sendBtn:hover {
     background-color: #707070;
 }
+
+/* 스크롤바의 전체 영역 */
+::-webkit-scrollbar {
+    width: 12px; /* 세로 스크롤바의 너비 */
+    height: 12px; /* 가로 스크롤바의 높이 */
+  }
+  
+  /* 스크롤바의 배경 */
+  ::-webkit-scrollbar-track {
+    background-color: #F5E050; /* 배경 색상 */
+    border-radius: 10px; /* 둥근 모서리 */
+  }
+
+  
+  /* 스크롤바의 핸들 */
+  ::-webkit-scrollbar-thumb {
+    background-color: #feef8c; /* 핸들 색상 */
+    border-radius: 10px; /* 둥근 모서리 */
+    height : 10px
+  }
+  
+  /* 스크롤바 핸들에 마우스를 올렸을 때 */
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #fff6bf; /* 핸들 색상이 어두워짐 */
+  }
