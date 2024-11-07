@@ -78,7 +78,6 @@
                 const timestamp = data.timestamp ? formatTime(data.timestamp.toDate()) : "시간 없음";
                 $('#chatting-bg').append('<p><span class="timestamp" style="font-size:10px; color:gray;">' + timestamp + '</span><strong style="color:#b79c00"> 1</strong><strong> ' + data.name + ' </strong> <span class="outputMsg">' + data.dialog + '</span></p>');
             })
-            $('#chatting-bg').scrollTop($('#chatting-bg')[0].scrollHeight);
         }
 
 
